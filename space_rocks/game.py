@@ -8,7 +8,7 @@ class SpaceRocks:
     def __init__(self):
         self._init_pygame()
         self.screen = pygame.display.set_mode((900, 600))
-        self.background = load_sprite("ocean", False)
+        self.background = load_sprite("space", False)
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font(None, 64)
         self.message = ""
