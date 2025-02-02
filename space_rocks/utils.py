@@ -33,10 +33,22 @@ def load_sound(name):
     path = f"assets/sounds/{name}.wav"
     return Sound(path)
 
-def print_text(surface, text, font, color=Color("tomato")):
-    text_surface = font.render(text, True, color)
+# def print_text(surface, text, font, color=Color("tomato")):
+#     text_surface = font.render(text, True, color)
+#
+#     rect = text_surface.get_rect()
+#     rect.center = Vector2(surface.get_size()) / 2
+#
+#     surface.blit(text_surface, rect)
 
+def print_text(surface, text, font, color=Color("tomato"), position=None):
+    text_surface = font.render(text, True, color)
     rect = text_surface.get_rect()
-    rect.center = Vector2(surface.get_size()) / 2
+
+    # Use the provided position if given, otherwise center the text
+    if position:
+        rect.topleft = position  # Position refers to top-left corner
+    else:
+        rect.center = Vector2(surface.get_size()) / 2  # Default centering
 
     surface.blit(text_surface, rect)

@@ -3,6 +3,14 @@ from utils import get_random_position, load_sprite, print_text
 # test by nick.
 from models import Asteroid, Spaceship
 
+import sys
+import os
+
+# Add the parent directory to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from main_menu.menu import main_menu
+
 class SpaceRocks:
     MIN_ASTEROID_DISTANCE = 250
     def __init__(self):
@@ -26,11 +34,14 @@ class SpaceRocks:
 
             self.asteroids.append(Asteroid(position, self.asteroids.append))
 
+
+
     def main_loop(self):
-        while True:
-            self._handle_input()
-            self._process_game_logic()
-            self._draw()
+         main_menu(self.screen, self.font)  # Call the menu function
+         while True:
+             self._handle_input()
+             self._process_game_logic()
+             self._draw()
 
     def _init_pygame(self):
         pygame.init()
