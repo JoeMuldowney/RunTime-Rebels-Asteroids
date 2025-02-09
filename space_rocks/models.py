@@ -53,6 +53,15 @@ class Spaceship(GameObject):
         self.create_bullet_callback(bullet)
         self.laser_sound.play()
 
+    def decelerate(self, amount):
+        if isinstance(self.velocity, Vector2):
+            current_speed = self.velocity.length()
+            if current_speed > 0:
+                new_speed = max(0, current_speed - amount)
+                self.velocity.scale_to_length(new_speed)
+        else:
+            self.velocity = max(0, self.velocity - amount)
+
 class Asteroid(GameObject):
     def __init__(self, position, create_asteroid_callback, size=3):
         self.create_asteroid_callback = create_asteroid_callback
