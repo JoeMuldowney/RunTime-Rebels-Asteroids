@@ -1,6 +1,4 @@
 import pygame
-from pygame import Vector2
-
 from utils import get_random_position, load_sprite, print_text
 # test by nick.
 from models import Asteroid, Spaceship
@@ -17,7 +15,7 @@ class SpaceRocks:
     MIN_ASTEROID_DISTANCE = 250
     def __init__(self):
         self._init_pygame()
-        self.screen = pygame.display.set_mode((1200, 900))
+        self.screen = pygame.display.set_mode((1550, 900))
         self.background = load_sprite("space", False)
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font(None, 64)
@@ -35,6 +33,7 @@ class SpaceRocks:
                     break
 
             self.asteroids.append(Asteroid(position, self.asteroids.append))
+
 
 
     def main_loop(self):
@@ -62,7 +61,6 @@ class SpaceRocks:
                 self.spaceship.shoot()
         is_key_pressed = pygame.key.get_pressed()
 
-
         if self.spaceship:
             if is_key_pressed[pygame.K_RIGHT]:
                 self.spaceship.rotate(clockwise=True)
@@ -70,8 +68,6 @@ class SpaceRocks:
                 self.spaceship.rotate(clockwise=False)
             if is_key_pressed[pygame.K_UP]:
                 self.spaceship.accelerate()
-            elif is_key_pressed[pygame.K_DOWN]:
-                self.spaceship.decelerate(amount = 0.3)
 
     def _process_game_logic(self):
         for game_object in self._get_game_objects():
