@@ -39,6 +39,7 @@ class SpaceRocks:
     def main_loop(self):
          main_menu(self.screen, self.font)  # Call the menu function
          while True:
+
              self._handle_input()
              self._process_game_logic()
              self._draw()
