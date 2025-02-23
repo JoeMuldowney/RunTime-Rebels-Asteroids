@@ -15,13 +15,14 @@ class SpaceRocks:
     MIN_ASTEROID_DISTANCE = 250
     def __init__(self):
         self._init_pygame()
-        self.screen = pygame.display.set_mode((900, 600))
+        self.screen = pygame.display.set_mode((1550, 900))
         self.background = load_sprite("space", False)
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font(None, 64)
         self.message = ""
         self.asteroids = []
         self.bullets = []
+        self.score = 0 # Intializing score
         self.spaceship = Spaceship((400, 300), self.bullets.append)
         for _ in range(6):
             while True:
@@ -77,6 +78,7 @@ class SpaceRocks:
         if self.spaceship:
             for asteroid in self.asteroids:
                 if asteroid.collides_with(self.spaceship):
+                    self.score += 10  # Increase the score (This will also be how i make different weapons)
                     self.spaceship = None
                     self.message = "You lost!"
                     break
@@ -97,11 +99,13 @@ class SpaceRocks:
             self.message = "You won!"
 
     def _draw(self):
-
         self.screen.blit(self.background, (0, 0))
 
         for game_object in self._get_game_objects():
             game_object.draw(self.screen)
+
+        # Display the current score at the top-left corner
+        print_text(self.screen, f"Score: {self.score}", self.font, (255, 255, 255), (15, 15))
 
         if self.message:
             print_text(self.screen, self.message, self.font)
