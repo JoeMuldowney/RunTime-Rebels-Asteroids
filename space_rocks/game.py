@@ -1,6 +1,4 @@
 import pygame
-from pygame import Vector2
-
 from utils import get_random_position, load_sprite, print_text
 # test by nick.
 from models import Asteroid, Spaceship
@@ -17,13 +15,14 @@ class SpaceRocks:
     MIN_ASTEROID_DISTANCE = 250
     def __init__(self):
         self._init_pygame()
-        self.screen = pygame.display.set_mode((1200, 900))
+        self.screen = pygame.display.set_mode((1550, 900))
         self.background = load_sprite("space", False)
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font(None, 64)
         self.message = ""
         self.asteroids = []
         self.bullets = []
+        self.score = 0 # Intializing score
         self.spaceship = Spaceship((400, 300), self.bullets.append)
         for _ in range(6):
             while True:
@@ -37,9 +36,11 @@ class SpaceRocks:
             self.asteroids.append(Asteroid(position, self.asteroids.append))
 
 
+
     def main_loop(self):
          main_menu(self.screen, self.font)  # Call the menu function
          while True:
+
              self._handle_input()
              self._process_game_logic()
              self._draw()
@@ -62,7 +63,6 @@ class SpaceRocks:
                 self.spaceship.shoot()
         is_key_pressed = pygame.key.get_pressed()
 
-
         if self.spaceship:
             if is_key_pressed[pygame.K_RIGHT]:
                 self.spaceship.rotate(clockwise=True)
@@ -70,8 +70,6 @@ class SpaceRocks:
                 self.spaceship.rotate(clockwise=False)
             if is_key_pressed[pygame.K_UP]:
                 self.spaceship.accelerate()
-            elif is_key_pressed[pygame.K_DOWN]:
-                self.spaceship.decelerate(amount = 0.3)
 
     def _process_game_logic(self):
         for game_object in self._get_game_objects():
@@ -80,6 +78,7 @@ class SpaceRocks:
         if self.spaceship:
             for asteroid in self.asteroids:
                 if asteroid.collides_with(self.spaceship):
+                    self.score += 10  # Increase the score (This will also be how i make different weapons)
                     self.spaceship = None
                     self.message = "You lost!"
                     break
@@ -100,11 +99,13 @@ class SpaceRocks:
             self.message = "You won!"
 
     def _draw(self):
-
         self.screen.blit(self.background, (0, 0))
 
         for game_object in self._get_game_objects():
             game_object.draw(self.screen)
+
+        # Display the current score at the top-left corner
+        print_text(self.screen, f"Score: {self.score}", self.font, (255, 255, 255), (15, 15))
 
         if self.message:
             print_text(self.screen, self.message, self.font)
