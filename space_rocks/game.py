@@ -22,6 +22,7 @@ class SpaceRocks:
         self.message = ""
         self.asteroids = []
         self.bullets = []
+        self.score = 0 # Intializing score
         self.spaceship = Spaceship((400, 300), self.bullets.append)
         for _ in range(6):
             while True:
@@ -39,6 +40,7 @@ class SpaceRocks:
     def main_loop(self):
          main_menu(self.screen, self.font)  # Call the menu function
          while True:
+
              self._handle_input()
              self._process_game_logic()
              self._draw()
@@ -76,6 +78,7 @@ class SpaceRocks:
         if self.spaceship:
             for asteroid in self.asteroids:
                 if asteroid.collides_with(self.spaceship):
+                    self.score += 10  # Increase the score (This will also be how i make different weapons)
                     self.spaceship = None
                     self.message = "You lost!"
                     break
@@ -96,11 +99,13 @@ class SpaceRocks:
             self.message = "You won!"
 
     def _draw(self):
-
         self.screen.blit(self.background, (0, 0))
 
         for game_object in self._get_game_objects():
             game_object.draw(self.screen)
+
+        # Display the current score at the top-left corner
+        print_text(self.screen, f"Score: {self.score}", self.font, (255, 255, 255), (15, 15))
 
         if self.message:
             print_text(self.screen, self.message, self.font)
