@@ -26,10 +26,15 @@ class Spaceship(GameObject):
     MANEUVERABILITY = 3
     ACCELERATION = 0.25
     BULLET_SPEED = 3
+    DEFAULT_SHOOT_DELAY = 1000
+    DECELERATION = 0.15
     def __init__(self, position, create_bullet_callback):
         self.create_bullet_callback = create_bullet_callback
         self.laser_sound = load_sound("laser")
         self.direction = Vector2(UP)
+        self.shoot_delay = self.DEFAULT_SHOOT_DELAY
+        self.last_shot = 0
+        self.multishot_active = False #flag for multishot powerup
         super().__init__(position, load_sprite("ship"), Vector2(0))
 
     def rotate(self, clockwise=True):
@@ -48,19 +53,37 @@ class Spaceship(GameObject):
         self.velocity += self.direction * self.ACCELERATION
 
     def shoot(self):
-        bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
-        bullet = Bullet(self.position, bullet_velocity)
-        self.create_bullet_callback(bullet)
-        self.laser_sound.play()
-
-    def decelerate(self, amount):
-        if isinstance(self.velocity, Vector2):
-            current_speed = self.velocity.length()
-            if current_speed > 0:
-                new_speed = max(0, current_speed - amount)
-                self.velocity.scale_to_length(new_speed)
+        if self.multishot_active:
+            angles = [-15, 0, 15]
+            for angle in angles:
+                direction = Vector2(self.direction).rotate(angle)
+                bullet_velocity = direction * self.BULLET_SPEED + self.velocity
+                bullet = Bullet(self.position, bullet_velocity)
+                self.create_bullet_callback(bullet)
+            self.laser_sound.play()
         else:
-            self.velocity = max(0, self.velocity - amount)
+            bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
+            bullet = Bullet(self.position, bullet_velocity)
+            self.create_bullet_callback(bullet)
+            self.laser_sound.play()
+
+    def decelerate(self):
+        if self.velocity.length() > 0:
+            current_speed = self.velocity.length()
+            new_speed = max(0, current_speed - self.DECELERATION)
+            if new_speed > 0:
+                self.velocity.scale_to_length(new_speed)
+            else:
+                self.velocity = Vector2(0,0)
+
+    def set_shoot_delay(self, delay):
+        self.shoot_delay = delay
+
+    def reset_shoot_delay(self):
+        self.shoot_delay = self.DEFAULT_SHOOT_DELAY
+
+    def set_multishot(self, active):
+        self.multishot_active = active
 
 class Asteroid(GameObject):
     def __init__(self, position, create_asteroid_callback, size=3):
@@ -88,3 +111,6 @@ class Bullet(GameObject):
     def __init__(self, position, velocity):
 
         super().__init__(position, load_sprite("bullet"), velocity)
+
+    def move(self, surface):
+        self.position += self.velocity
