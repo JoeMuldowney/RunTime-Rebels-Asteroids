@@ -1,14 +1,13 @@
 import pygame
-import csv
 import os
 import sys
 from utils import get_random_position, load_sprite, print_text
 from models import Asteroid, Spaceship
 from upgrade import Upgrade #new import
-
+from menu import main_menu
+from leader_board import save_score, get_player_name
 # Add the parent directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from main_menu.menu import main_menu
 
 class SpaceRocks:
     MIN_ASTEROID_DISTANCE = 250
@@ -159,45 +158,10 @@ class SpaceRocks:
         return game_objects
     
     def game_over(self):
-        player_name = self.get_player_name()
-        self.save_score(player_name, self.score)
+        get_player_name(self.font, self.screen, self.score)
         self.display_game_over()
-    
-    def get_player_name(self):
-        """Prompt the player for their name."""
-        name = ""
-        input_active = True
-        
-        while input_active:
-            self.screen.fill((0, 0, 0))
-            print_text(self.screen, "Enter your name: " + name, self.font, (255, 255, 255), (100, 400))
-            pygame.display.flip()
-            
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    return "Anonymous"
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                        input_active = False
-                    elif event.key == pygame.K_BACKSPACE:
-                        name = name[:-1]
-                    else:
-                        name += event.unicode
-        
-        return name if name else "Anonymous"
-    
-    def save_score(self, name, score):
-        """Save the player's score to a CSV file."""
-        file_path = "scores.csv"
-        file_exists = os.path.isfile(file_path)
-        
-        with open(file_path, mode='a', newline='') as file:
-            writer = csv.writer(file)
-            if not file_exists:
-                writer.writerow(["Name", "Score"])
-            writer.writerow([name, score])
-    
+
+
     def display_game_over(self):
         """Show game over screen with restart option."""
         self.screen.fill((0, 0, 0))
