@@ -4,8 +4,6 @@ import pygame
 from utils import print_text
 import pandas as pd
 
-
-
 def save_score(name, score):
     """Save the player's score to a CSV file."""
     file_path = "scores.csv"
@@ -55,7 +53,7 @@ def show_leaderboard(screen, font):
     while running:
         screen.blit(background,(0,0))
         print_text(screen, "Spaceships, Asteroids, Explosions", font, (255, 255, 255), (350, 25))
-        print_text(screen, "All Time Top 5!", font, (255, 255, 255), (575, 100))
+        print_text(screen, "All Time Top 5!", font, (255, 255, 0), (575, 100))
 
         for i, row in enumerate(top_scores.itertuples(), start=1):
             text = f"{i}. {row.Name} - {row.Score}"

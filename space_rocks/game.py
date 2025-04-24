@@ -5,13 +5,15 @@ from utils import get_random_position, load_sprite, print_text
 from models import Asteroid, Spaceship
 from upgrade import Upgrade #new import
 from menu import main_menu
-from leader_board import save_score, get_player_name
+from leader_board import get_player_name
+from levels import restart_game
 # Add the parent directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 class SpaceRocks:
     MIN_ASTEROID_DISTANCE = 250
     UPGRADE_DESPAWN_TIME = 10000 #10 second despawn time
+    LEVEL = 1
     
     def __init__(self):
         self._init_pygame()
@@ -30,7 +32,7 @@ class SpaceRocks:
         self.last_shot = 0
         self.running = True
         
-        for _ in range(6):
+        for _ in range(self.LEVEL):
             while True:
                 position = get_random_position(self.screen)
                 if position.distance_to(self.spaceship.position) > self.MIN_ASTEROID_DISTANCE:
@@ -129,8 +131,9 @@ class SpaceRocks:
                 self.bullets.remove(bullet)
         
         if not self.asteroids and self.spaceship:
-            self.message = "You won!"
-            self.game_over()
+            self.LEVEL += 1
+            self.message = "Next Level"
+            restart_game(self, self.LEVEL)
     
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
