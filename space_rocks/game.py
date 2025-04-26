@@ -6,7 +6,7 @@ from models import Asteroid, Spaceship
 from upgrade import Upgrade #new import
 from menu import main_menu
 from leader_board import get_player_name
-from levels import restart_game
+from levels import restart_game, retry_game
 # Add the parent directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -171,7 +171,7 @@ class SpaceRocks:
         print_text(self.screen, "Game Over!", self.font, (255, 255, 255), (100, 300))
         print_text(self.screen, "Press R to Restart or Q to Quit", self.font, (255, 255, 255), (100, 350))
         pygame.display.flip()
-        
+        self.LEVEL = 1
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -180,7 +180,7 @@ class SpaceRocks:
                     return
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_r:
-                        main_menu(self.screen, self.font)
+                        retry_game(self, self.LEVEL)
                         return
                     elif event.key == pygame.K_q:
                         self.running = False
