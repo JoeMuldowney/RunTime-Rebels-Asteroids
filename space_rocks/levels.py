@@ -1,10 +1,11 @@
 from utils import get_random_position
 from models import Spaceship, Asteroid
 
-def restart_game(self, level):
+def next_level(self, level):
     self.asteroids.clear()
     self.bullets.clear()
     self.upgrades.clear()
+    self.spaceship = Spaceship((400, 300), self.bullets.append)
     self.active_upgrade = None
     self.upgrade_end_time = 0
     self.last_shot = 0

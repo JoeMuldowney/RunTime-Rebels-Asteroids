@@ -1,4 +1,5 @@
 import pygame
+
 import os
 import sys
 from utils import get_random_position, load_sprite, print_text
@@ -6,9 +7,9 @@ from models import Asteroid, Spaceship
 from upgrade import Upgrade #new import
 from menu import main_menu
 from leader_board import get_player_name
-from levels import restart_game, retry_game
+from levels import next_level, retry_game
 # Add the parent directory to sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 class SpaceRocks:
     MIN_ASTEROID_DISTANCE = 250
@@ -133,7 +134,7 @@ class SpaceRocks:
         if not self.asteroids and self.spaceship:
             self.LEVEL += 1
             self.message = "Next Level"
-            restart_game(self, self.LEVEL)
+            next_level(self, self.LEVEL)
     
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
