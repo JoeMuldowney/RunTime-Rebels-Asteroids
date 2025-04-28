@@ -18,7 +18,7 @@ This is an undergrad computer science capstone project.  We modified and added t
 
 # GettingStarted
 - Move into the 'RunTime-Rebels-Asteroids' folder.
-- Type "python space_rocks" in the cli to start the dame.
+- Type "python space_rocks" in the cli to start the game.
 
 # Features
 
